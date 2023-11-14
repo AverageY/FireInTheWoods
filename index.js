@@ -1,10 +1,10 @@
 const express = require('express');
 const path = require('path');
-const app = express();
+const ejsMate = require('ejs-mate');
 const mongoose = require('mongoose');
 const methodOverride = require('method-override');
-
 const Campground = require('./models/campground');
+const app = express();
 mongoose.connect('mongodb://127.0.0.1:27017/fire-camp')
   .then(() => console.log('Connected to DB!'))
     .catch(err => {
@@ -16,11 +16,12 @@ db.once('open', () => {
 
  console.log('Database connected');
 });
+app.engine('ejs', ejsMate);
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
-app.get('/', (req, res) => res.render('home'));
+
 
 app.get('/campgrounds', async (req, res) => {
 
