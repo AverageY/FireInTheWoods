@@ -33,9 +33,13 @@ const login = (req, res) => {
 }
 
 const logout = (req, res) => {
-    req.logout();
-    req.flash('success', "Goodbye!");
-    res.redirect('/campgrounds');
-}
+    req.logout(function (err) {
+        if (err) {
+            return next(err);
+        }
+        req.flash('success', 'Goodbye!');
+        res.redirect('/campgrounds');
+    });
+}; 
 
 module.exports = { renderRegister, register, renderLogin, login, logout }
