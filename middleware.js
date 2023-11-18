@@ -4,16 +4,17 @@ const { campgroundSchema, reviewSchema } = require('./schemas.js');
 const Review = require('./models/review');
 
 
+
 const isLoggedIn = (req, res, next) => {
     if (!req.isAuthenticated()) {
-        req.session.returnTo = req.originalUrl; // req.originalUrl is the url that the user is requesting
+        req.session.returnTo = req.originalUrl; // add this line
         req.flash('error', 'You must be signed in first!');
         return res.redirect('/login');
     }
     next();
 }
-const storeReturnTo = (req, res, next) => {   // this is to store the url that the user is requesting before being logged in
-    if (req.session.returnTo) {               //else user gets send to homepage everytime
+const storeReturnTo = (req, res, next) => {
+    if (req.session.returnTo) {
         res.locals.returnTo = req.session.returnTo;
     }
     next();
@@ -47,7 +48,8 @@ const validateCampground = (req, res, next) => {
     } else {
         next();
     }
-  }
+}
+
 
   const validateReview = (req, res, next) => {
     const { error } = reviewSchema.validate(req.body);

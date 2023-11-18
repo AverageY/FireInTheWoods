@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const session = require('express-session');
 
 const renderRegister = (req, res) => {
     res.render('users/register');
@@ -27,7 +28,7 @@ const renderLogin = (req, res) => {
 
 const login = (req, res) => {
     req.flash('success', 'welcome back!');
-    const redirectUrl = req.session.returnTo || '/campgrounds';
+    const redirectUrl = res.locals.returnTo || '/campgrounds'; // 
     delete req.session.returnTo;
     res.redirect(redirectUrl);
 }
