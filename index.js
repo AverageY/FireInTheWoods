@@ -19,8 +19,12 @@ const User = require('./models/user');
 const app = express();
 const mongoSanitize = require('express-mongo-sanitize');
 const helmet = require('helmet');
-
-mongoose.connect('mongodb://127.0.0.1:27017/fire-camp')
+const dbUrl = process.env.DB_URL;
+const MongoStore = require('connect-mongo');
+const secret= process.env.SECRET;
+const name= process.env.NAME;
+//'mongodb://127.0.0.1:27017/fire-camp'
+mongoose.connect(dbUrl)
   .then(() => console.log('Connected to DB!'))
     .catch(err => {
         console.log(`DB Connection Error: ${err.message}`);
@@ -35,13 +39,20 @@ app.engine('ejs', ejsMate);
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
-
+const store = MongoStore.create({
+  mongoUrl: dbUrl,
+  touchAfter: 24 * 60 * 60,
+  crypto: {
+      secret: secret
+  }
+});
 const sessionConfig = {
-  name: 'ADbruh',
-  secret: 'thisisasecret',
+  name: name,
+  secret: secret,
  // secure : true,
    resave: false,
    saveUninitialized: true,
+   store,
    cookie: {
        httpOnly: true,
       // secure: true,
@@ -95,8 +106,10 @@ app.use(
               "'self'",
               "blob:",
               "data:",
-              "https://res.cloudinary.com/dipzek90s/",  
+              "https://res.cloudinary.com/dipzek90s/",
               "https://images.unsplash.com/"
+
+              
           ],
           fontSrc: ["'self'", ...fontSrcUrls],
       },
