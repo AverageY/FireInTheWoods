@@ -1,4 +1,7 @@
 {
+  "engines":{
+      "node": "18.16.1"
+  },
   "name": "fireinthewoods",
   "version": "1.0.0",
   "description": "Project on providing safe spaces to camp anywhere",
